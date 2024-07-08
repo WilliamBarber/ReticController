@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'AppState.dart';
+import 'TempStatusPage.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -28,7 +29,15 @@ class HomePage extends StatelessWidget {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        print('Button pressed!');
+                          Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context)
+                          {
+                            return Scaffold(
+                              body: TempStatusPage(),
+                            );
+                          }),
+                          );
                       },
                       child: Text(
                           !appState.getReticStatus() ? 'Off' : 'On',
