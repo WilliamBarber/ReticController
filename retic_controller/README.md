@@ -1,6 +1,6 @@
 # retic_controller
 
-Retic Controller App
+Retic controller app
 
 ## Getting Started
 
