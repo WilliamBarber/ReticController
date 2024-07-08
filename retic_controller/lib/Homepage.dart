@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'AppState.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,12 +29,12 @@ class HomePage extends StatelessWidget {
                       onPressed: () {
                         print('Button pressed!');
                       },
-                        child: Text(
-                            !appState.getReticStatus() ? 'Off' : 'On',
-                      style: DefaultTextStyle.of(context)
-                          .style
-                          .apply(fontSizeFactor: 2.0)
-                        ),
+                      child: Text(
+                          !appState.getReticStatus() ? 'Off' : 'On',
+                          style: DefaultTextStyle.of(context)
+                              .style
+                              .apply(fontSizeFactor: 2.0)
+                      ),
                     ),
                     const Text('Press button to set a temporary status'),
                     ListView.builder(
@@ -113,5 +112,6 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
-    );  }
+    );
+  }
 }

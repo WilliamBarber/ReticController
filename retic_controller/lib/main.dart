@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:provider/provider.dart';
 import "AppState.dart";
-import "Homepage.dart";
+import "HomepageFramework.dart";
 
 
 void main() {
@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
               colorScheme: darkColorScheme ?? _defaultDarkColorScheme,
               useMaterial3: true,
             ),
-            home: const HomePage(),
+            home: const HomePageFramework(),
           ),
       );
     }
