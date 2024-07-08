@@ -12,7 +12,17 @@ enum DateFormat {
 
 
 class AppState extends ChangeNotifier {
-    var dateFormat = DateFormat.dayMonthYear;
+  var selectedIndex = 0;
+  var dateFormat = DateFormat.dayMonthYear;
+
+  void setPage(int page) {
+    selectedIndex = page;
+    notifyListeners();
+  }
+
+  int getPage() {
+    return selectedIndex;
+  }
 
   DateFormat getDateFormat() {
     return dateFormat;

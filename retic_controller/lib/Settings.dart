@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'AppState.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class SettingsPage extends StatelessWidget {
+  const SettingsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +11,7 @@ class HomePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home'),
+        title: const Text('Settings'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
@@ -20,24 +20,6 @@ class HomePage extends StatelessWidget {
             Center(
                 child: Column(
                   children: [
-                    Text(
-                      'Current Retic Status:',
-                      style: DefaultTextStyle.of(context)
-                          .style
-                          .apply(fontSizeFactor: 2.0),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        print('Button pressed!');
-                      },
-                      child: Text(
-                          !appState.getReticStatus() ? 'Off' : 'On',
-                          style: DefaultTextStyle.of(context)
-                              .style
-                              .apply(fontSizeFactor: 2.0)
-                      ),
-                    ),
-                    const Text('Press button to set a temporary status'),
                     ListView.builder(
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
