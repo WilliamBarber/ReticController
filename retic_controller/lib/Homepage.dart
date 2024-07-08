@@ -8,6 +8,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     var appState = context.watch<AppState>();
 
     return Scaffold(
@@ -59,6 +60,7 @@ class HomePage extends StatelessWidget {
                             ScaffoldMessenger.of(context).showSnackBar(snackBar);
                           },
                           child: Card(
+                            //color: theme.colorScheme.secondaryContainer,
                             margin: const EdgeInsets.symmetric(vertical: 5),
                             child: Padding(
                               padding: const EdgeInsets.all(10),

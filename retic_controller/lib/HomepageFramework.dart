@@ -10,6 +10,7 @@ class HomePageFramework extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<AppState>();
+    final theme = Theme.of(context);
 
     var selectedIndex = appState.getPage();
     var pages = [HomePage(), SettingsPage()];
@@ -22,14 +23,14 @@ class HomePageFramework extends StatelessWidget {
           children: [
             Expanded(
               child: Container(
-                color: Theme.of(context).colorScheme.primaryContainer,
+                color: theme.colorScheme.primaryContainer,
                 child: page,
               ),
             ),
           ],
         ),
         bottomNavigationBar: NavigationBar(
-            destinations: [
+          destinations: const [
               NavigationDestination(
                 icon: Icon(Icons.home_rounded),
                 label: 'Home',
@@ -44,7 +45,6 @@ class HomePageFramework extends StatelessWidget {
                 appState.setPage(index);
               },
             ),
-
       );
     });
   }}

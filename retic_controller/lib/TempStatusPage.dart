@@ -35,7 +35,7 @@ class _TempStatusPageState extends State<TempStatusPage> {
                 onPressed: () async {
                     Navigator.pop(context);
                 },
-                child: const Text('Save')),
+                child: const Text('Start')),
           ),
         ],
       ),
@@ -45,37 +45,12 @@ class _TempStatusPageState extends State<TempStatusPage> {
           children: [
             ListTile(
               contentPadding: EdgeInsets.only(left: 5.0, right: 5.0),
-              leading: Icon(Icons.calendar_month_rounded),
-              title: Text(
-                  style: DefaultTextStyle.of(context)
-                      .style
-                      .apply(fontSizeFactor: 1.3),
-                  'Activity date'),
-              onTap: () async {
-                DateTime? picked = await showDatePicker(
-                  helpText: '',
-                  context: context,
-                  initialDate: selectedDateTime,
-                  firstDate: DateTime.now(),
-                  lastDate: DateTime(DateTime.now().year + 10),
-                );
-                if (picked != null) {
-                  setState(() {
-                    selectedDateTime = DateTime.parse(
-                        '${picked.year}-${DateTimeConverter.getMonthString(picked)}-${DateTimeConverter.getDayString(picked)} 09:00:00');
-                  });
-                }
-              },
-              trailing: formattedSelectionDate(appState.getDateFormat()),
-            ),
-            ListTile(
-              contentPadding: EdgeInsets.only(left: 5.0, right: 5.0),
               leading: Icon(Icons.access_time_rounded),
               title: Text(
                   style: DefaultTextStyle.of(context)
                       .style
                       .apply(fontSizeFactor: 1.3),
-                  'Activity reminder'),
+                  'End Time'),
               onTap: () async {
                 TimeOfDay? picked = await showTimePicker(
                   helpText: '',
@@ -95,73 +70,6 @@ class _TempStatusPageState extends State<TempStatusPage> {
                       .apply(fontSizeFactor: 1.3),
                   ' ${DateTimeConverter.getHourStringDateTime(selectedDateTime)}:${DateTimeConverter.getMinuteStringDateTime(selectedDateTime)}'),
             ),
-            SwitchListTile(
-                contentPadding: EdgeInsets.only(
-                  left: 5,
-                  right: 5,
-                ),
-                secondary: Icon(Icons.event_repeat_rounded),
-                title: Text(
-                    style: DefaultTextStyle.of(context)
-                        .style
-                        .apply(fontSizeFactor: 1.3),
-                    'Repeat activity weekly'),
-                value: repeatActivity,
-                onChanged: (bool value) {
-                  setState(() {
-                    repeatActivity = value;
-                  });
-                }),
-            Divider(),
-            ListTile(
-              contentPadding: EdgeInsets.only(left: 5.0, right: 5.0),
-              leading: Icon(Icons.attach_file_rounded),
-              title: Text(
-                  style: DefaultTextStyle.of(context)
-                      .style
-                      .apply(fontSizeFactor: 1.3),
-                  'Music file'),
-              onTap: () async {
-                print(Text('NOT IMPLEMENTED'));
-              },
-              trailing: Text(
-                  style: DefaultTextStyle.of(context)
-                      .style
-                      .apply(fontSizeFactor: 1.3),
-                  'None attached'),
-            ),
-            // showModalBottomSheet<void>(
-            //             context: context,
-            //             builder: (BuildContext context) {
-            //               return SizedBox(
-            //                 height: 78,
-            //                 child: Center(
-            //                   child: Row(
-            //                     mainAxisAlignment:
-            //                         MainAxisAlignment.center,
-            //                     mainAxisSize: MainAxisSize.min,
-            //                     children: <Widget>[
-            //                       ElevatedButton(
-            //                         onPressed: () {
-            //                           _getFromGallery();
-            //                         },
-            //                         child: Text('Pick From File'),
-            //                       ),
-            //                       Padding(
-            //                         padding: EdgeInsets.all(5),
-            //                       ),
-            //                       ElevatedButton(
-            //                         onPressed: () {
-            //                           _getFromCamera();
-            //                         },
-            //                         child: Text('Take a Photo'),
-            //                       ),
-            //                     ],
-            //                   ),
-            //                 ),
-            //               );
-            //             },
-            //           );
           ],
         ),
       ),

@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import "AppState.dart";
 import "HomepageFramework.dart";
 
+//TODO: Update DynamicColor once new version is available!!!
 
 void main() {
   runApp(const MyApp());
