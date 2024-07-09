@@ -42,6 +42,10 @@ class AppState extends ChangeNotifier {
       );
   }
 
+  bool isStationActive(int station) {
+    return station == activeStation;
+  }
+
   void activateStationFromQueue() {
     server.activateStation(queuedStation);
     activeStation = server.getActiveStation();

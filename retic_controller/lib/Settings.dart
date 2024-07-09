@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'StationStatusPage.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -9,11 +10,23 @@ class SettingsPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Settings'),
       ),
-      body: const Center(
+      body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('TODO: View all station statuses'),
+            FilledButton.tonal(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) {
+                      return const Scaffold(
+                        body: StationStatusPage(),
+                      );
+                    }),
+                  );
+                },
+                child: Text('View all station statuses'),
+            ),
           ],
         ),
       ),

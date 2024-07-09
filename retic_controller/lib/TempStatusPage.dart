@@ -66,6 +66,4 @@ class _TempStatusPageState extends State<TempStatusPage> {
       ),
     );
   }
-
-
 }
