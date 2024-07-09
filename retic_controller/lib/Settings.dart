@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'DateFormatDropDown.dart';
 
 class SettingsPage extends StatelessWidget {
+  const SettingsPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -12,7 +13,6 @@ class SettingsPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            DateFormatDropDown(),
             Text('TODO: View all station statuses'),
           ],
         ),

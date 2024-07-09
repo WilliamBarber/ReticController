@@ -1,98 +1,71 @@
 import 'package:flutter/material.dart';
+import 'ServerSimulator.dart';
 
 class AppState extends ChangeNotifier {
-  var selectedIndex = 0;
-  var dateFormat = DateFormat.dayMonthYear;
-  var reticEnabled = false;
-  var currentSchedule = Schedule.one; //TODO: pull from server
-  var activeStation = 0; //TODO: pull from server
-  var duration = 1; //TODO: pull from server
-  var queuedStation = '0';
-  var queuedDuration = 1;
+  int selectedIndex = 0;
+
+  ServerSimulator server = ServerSimulator();
+  int duration = 1; //TODO: pull from server
+  int activeSchedule = 1;
+  int activeStation = 0;
+  bool reticActive = false;
+  int queuedStation = 0;
+  int queuedDuration = 1;
 
   void setPage(int page) {
     selectedIndex = page;
     notifyListeners();
   }
 
-  void setDateFormat(DateFormat dateFormat) {
-    this.dateFormat = dateFormat;
+  void activateSchedule(int schedule) {
+    server.activateSchedule(schedule);
+    activeSchedule = server.getActiveScheduleIndex();
     notifyListeners();
   }
 
-  void setCurrentSchedule(Schedule schedule) {
-    currentSchedule = schedule; //TODO: push to server
-    notifyListeners();
+  Column _createScheduleColumn(int scheduleNumber) {
+    String dayString = server.getScheduleNumber(scheduleNumber).getDayString();
+    String timeString = server.getScheduleNumber(scheduleNumber).getTimeString();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(dayString),
+        Text(timeString),
+      ],
+    );
   }
 
-  Text _createScheduleText(int index) { //TODO: pull from server
-    var scheduleString = '';
-    if (index == 0) {
-      scheduleString += 'M, ';
-      scheduleString += 'T, ';
-      scheduleString += 'TH, ';
-      scheduleString += 'SA';
-    }
-    else if (index == 1) {
-      scheduleString += 'M, ';
-      scheduleString += 'W, ';
-      scheduleString += 'SA';
-    }
-    else {
-      scheduleString += 'T, ';
-      scheduleString += 'W, ';
-      scheduleString += 'TH, ';
-      scheduleString += 'F, ';
-      scheduleString += 'SA';
-    }
-    return Text(scheduleString);
-  }
-
-  Align getScheduleText(int index) {
+  Align getScheduleText(int scheduleNumber) {
       return Align(
         alignment: Alignment.topLeft,
-        child: _createScheduleText(index),
+        child: _createScheduleColumn(scheduleNumber),
       );
   }
 
-  void activateStation() {
-    var station = 1;
-    if (queuedStation.length <= 1) {
-      station = int.parse(queuedStation);
+  void activateStationFromQueue() {
+    server.activateStation(queuedStation);
+    activeStation = server.getActiveStation();
+    if (activeStation == 7) {
+      runAll();
+      return;
     }
-    activeStation = station; //TODO: push to server (note: may need to do a single or a full cycle)
-    queuedStation = '0';
+    else if (activeStation == 0) {
+      reticActive = false;
+    }
+    else {
+      reticActive = true;
+    }
+
     notifyListeners();
   }
 
-  void updateDuration() {
+  void updateDurationFromQueue() {
     duration = queuedDuration; //TODO: push to server
     notifyListeners();
   }
 
   void runAll() {
-    queuedStation = '1';
-    activateStation();
-  }
-}
-
-enum DateFormat {
-  dayMonthYear('Day/Month/Year'),
-  monthDayYear('Month/Day/Year'),
-  yearMonthDay('Year/Month/Day');
-
-  const DateFormat(this.label);
-  final String label;
-}
-
-enum Schedule {none, one, two, three}
-
-Schedule getScheduleForInt(int value) {
-  if (value == 0) {
-    return Schedule.one;
-  } else if (value == 1) {
-    return Schedule.two;
-  } else {
-    return Schedule.three;
+    queuedStation = 1; //TODO: this needs to run all stations in order. Will need to push to server.
+    activateStationFromQueue();
   }
 }

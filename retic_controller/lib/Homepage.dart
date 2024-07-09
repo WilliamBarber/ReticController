@@ -22,32 +22,32 @@ class HomePage extends StatelessWidget {
                 child: Column(
               children: [
                 Text(
-                  (appState.activeStation == 0) ? 'All Stations are Off' : 'Station ${appState.activeStation} is On',
+                  (!appState.reticActive) ? 'All Stations are Off' : 'Station ${appState.activeStation} is On',
                   style: DefaultTextStyle.of(context)
                       .style
                       .apply(fontSizeFactor: 2.0),
                 ),
                 FilledButton.tonal(
                   onPressed: () {
-                    if (appState.activeStation == 0) {
+                    if (!appState.reticActive) {
+                      appState.queuedStation = 7;
                       appState.queuedDuration = 1;
-                      appState.queuedStation = 'All';
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) {
-                          return Scaffold(
+                          return const Scaffold(
                             body: TempStatusPage(),
                           );
                         }),
                       );
                     } else {
-                      appState.queuedStation = '0';
+                      appState.queuedStation = 0;
                       appState.queuedDuration = 1;
-                      appState.activateStation();
-                      appState.updateDuration();
+                      appState.activateStationFromQueue();
+                      appState.updateDurationFromQueue();
                     }
                   },
-                  child: (appState.activeStation == 0)
+                  child: (!appState.reticActive)
                       ? const Text('Turn on Temporarily')
                       : const Text('Turn off'),
                 ),
@@ -67,21 +67,22 @@ class HomePage extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(10),
                           child: ListTile(
+                            isThreeLine: true,
                             contentPadding: const EdgeInsets.all(1),
                             leading: Radio(
                               toggleable: true,
-                              groupValue: appState.currentSchedule,
-                              value: getScheduleForInt(index),
-                              onChanged: (Schedule? value) {
+                              groupValue: appState.activeSchedule - 1,
+                              value: index,
+                              onChanged: (value) {
                                 if (value == null) {
-                                  appState.setCurrentSchedule(Schedule.none);
+                                  appState.activateSchedule(0);
                                 } else {
-                                  appState.setCurrentSchedule(value);
+                                  appState.activateSchedule(value + 1);
                                 }
                               },
                             ),
                             title: Text('Schedule ${index + 1}'),
-                            subtitle: appState.getScheduleText(index),
+                            subtitle: appState.getScheduleText(index + 1),
                           ),
                         ),
                       ),

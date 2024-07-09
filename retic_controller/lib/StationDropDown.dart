@@ -25,7 +25,7 @@ class _StationDropDownState extends State<StationDropDown> {
       onSelected: (String? value) {
         setState(() {
             dropDownValue = value!;
-            appState.queuedStation = value;
+            appState.queuedStation = value.length > 1 ? 7 : int.parse(value); // 7 for all stations
           }
         );
       },

@@ -13,7 +13,7 @@ class HomePageFramework extends StatelessWidget {
     final theme = Theme.of(context);
 
     var selectedIndex = appState.selectedIndex;
-    var pages = [HomePage(), SettingsPage()];
+    var pages = const [HomePage(), SettingsPage()];
     Widget page = pages[selectedIndex];
 
     return LayoutBuilder(builder: (context, constraints) {
@@ -23,7 +23,6 @@ class HomePageFramework extends StatelessWidget {
           children: [
             Expanded(
               child: Container(
-                color: theme.colorScheme.primaryContainer,
                 child: page,
               ),
             ),
