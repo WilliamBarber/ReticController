@@ -12,7 +12,7 @@ class HomePageFramework extends StatelessWidget {
     var appState = context.watch<AppState>();
     final theme = Theme.of(context);
 
-    var selectedIndex = appState.getPage();
+    var selectedIndex = appState.selectedIndex;
     var pages = [HomePage(), SettingsPage()];
     Widget page = pages[selectedIndex];
 

@@ -44,8 +44,8 @@ class _SchedulePageState extends State<SchedulePage> {
         child: ListView(
           children: [
             ListTile(
-              contentPadding: EdgeInsets.only(left: 5.0, right: 5.0),
-              leading: Icon(Icons.calendar_month_rounded),
+              contentPadding: const EdgeInsets.only(left: 5.0, right: 5.0),
+              leading: const Icon(Icons.calendar_month_rounded),
               title: Text(
                   style: DefaultTextStyle.of(context)
                       .style
@@ -66,7 +66,7 @@ class _SchedulePageState extends State<SchedulePage> {
                   });
                 }
               },
-              trailing: formattedSelectionDate(appState.getDateFormat()),
+              trailing: formattedSelectionDate(appState.dateFormat),
             ),
             ListTile(
               contentPadding: EdgeInsets.only(left: 5.0, right: 5.0),
@@ -130,38 +130,6 @@ class _SchedulePageState extends State<SchedulePage> {
                       .apply(fontSizeFactor: 1.3),
                   'None attached'),
             ),
-            // showModalBottomSheet<void>(
-            //             context: context,
-            //             builder: (BuildContext context) {
-            //               return SizedBox(
-            //                 height: 78,
-            //                 child: Center(
-            //                   child: Row(
-            //                     mainAxisAlignment:
-            //                         MainAxisAlignment.center,
-            //                     mainAxisSize: MainAxisSize.min,
-            //                     children: <Widget>[
-            //                       ElevatedButton(
-            //                         onPressed: () {
-            //                           _getFromGallery();
-            //                         },
-            //                         child: Text('Pick From File'),
-            //                       ),
-            //                       Padding(
-            //                         padding: EdgeInsets.all(5),
-            //                       ),
-            //                       ElevatedButton(
-            //                         onPressed: () {
-            //                           _getFromCamera();
-            //                         },
-            //                         child: Text('Take a Photo'),
-            //                       ),
-            //                     ],
-            //                   ),
-            //                 ),
-            //               );
-            //             },
-            //           );
           ],
         ),
       ),

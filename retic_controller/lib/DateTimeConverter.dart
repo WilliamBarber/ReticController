@@ -88,9 +88,9 @@ class DateTimeConverter {
   static String formattedDate(DateTime dateTime, BuildContext context) {
     var appState = context.watch<AppState>();
 
-    if (appState.getDateFormat() == DateFormat.dayMonthYear) {
+    if (appState.dateFormat == DateFormat.dayMonthYear) {
       return '${dateTime.day}/${dateTime.month}/${dateTime.year}';
-    } else if (appState.getDateFormat() == DateFormat.monthDayYear) {
+    } else if (appState.dateFormat == DateFormat.monthDayYear) {
       return '${dateTime.month}/${dateTime.day}/${dateTime.year}';
     } else {
       return '${dateTime.year}/${dateTime.month}/${dateTime.day}';
