@@ -1,8 +1,20 @@
 import 'package:flutter/material.dart';
 import 'ServerSimulator.dart';
 
+enum DateFormat {
+  dayMonthYear('Day/Month/Year'),
+  monthDayYear('Month/Day/Year'),
+  yearMonthDay('Year/Month/Day');
+
+  const DateFormat(this.label);
+
+  final String label;
+}
+
+
 class AppState extends ChangeNotifier {
   int selectedIndex = 0;
+  var dateFormat = DateFormat.dayMonthYear;
 
   ServerSimulator server = ServerSimulator();
   int duration = 1; //TODO: pull from server
@@ -17,6 +29,29 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool isDayActiveInSchedule(int scheduleIndex, int dayIndex) {
+    return server.getSchedule(scheduleIndex).getDays().contains(Day.values[dayIndex]);
+  }
+
+  void setDayStatusInSchedule(int scheduleIndex, int dayIndex, bool active) {
+    Schedule oldSchedule = server.getSchedule(scheduleIndex);
+    List<Day> newDays = oldSchedule.getDays();
+    if (active) {
+      newDays.add(Day.values[dayIndex]);
+    }
+    else {
+      newDays.remove(Day.values[dayIndex]);
+    }
+    server.replaceSchedule(scheduleIndex, Schedule(newDays, oldSchedule.getHour(), oldSchedule.getMinute()));
+    notifyListeners();
+  }
+
+  String getDayForIndex(int index) {
+    String dayString = Day.values[index].toString();
+    dayString = dayString.substring(dayString.indexOf('.') + 1);
+    return dayString.replaceFirst(dayString[0], dayString[0].toUpperCase());
+  }
+
   void activateSchedule(int schedule) {
     server.activateSchedule(schedule);
     activeSchedule = server.getActiveScheduleIndex();
@@ -24,8 +59,8 @@ class AppState extends ChangeNotifier {
   }
 
   Column _createScheduleColumn(int scheduleNumber) {
-    String dayString = server.getScheduleNumber(scheduleNumber).getDayString();
-    String timeString = server.getScheduleNumber(scheduleNumber).getTimeString();
+    String dayString = server.getSchedule(scheduleNumber).getDayString();
+    String timeString = server.getSchedule(scheduleNumber).getTimeString();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

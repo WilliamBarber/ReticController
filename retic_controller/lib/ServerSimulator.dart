@@ -1,3 +1,5 @@
+enum Day {monday, tuesday, wednesday, thursday, friday, saturday, sunday}
+
 class ServerSimulator {
   int _activeStation = 0;
   List<Schedule> _schedules = [
@@ -28,13 +30,6 @@ class ServerSimulator {
   2: schedule 2
   3: schedule 3
    */
-  void activateSchedule(int schedule) {
-    for (int i = 0; i < _schedules.length; i++) {
-      _schedules[i].makeInactive();
-    }
-    _schedules[schedule].makeActive();
-  }
-
   int getActiveScheduleIndex() {
     for (int i = 0; i < _schedules.length; i++) {
       if (_schedules[i].isActive()) {
@@ -44,13 +39,22 @@ class ServerSimulator {
     return 0;
   }
 
-  Schedule getScheduleNumber(int index) {
+  void activateSchedule(int schedule) {
+    for (int i = 0; i < _schedules.length; i++) {
+      _schedules[i].makeInactive();
+    }
+    _schedules[schedule].makeActive();
+  }
+
+  Schedule getSchedule(int index) {
     return _schedules[index];
   }
 
-}
+  void replaceSchedule(int scheduleIndex, Schedule newSchedule) {
+    _schedules[scheduleIndex] = newSchedule;
+  }
 
-enum Day {monday, tuesday, wednesday, thursday, friday, saturday, sunday}
+}
 
 class Schedule {
   int _timeHour = 0;
@@ -79,6 +83,14 @@ class Schedule {
 
   List<Day> getDays() {
     return _days;
+  }
+
+  int getHour() {
+    return _timeHour;
+  }
+
+  int getMinute() {
+    return _timeMinute;
   }
 
   String getTimeString() {

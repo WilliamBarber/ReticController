@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'AppState.dart';
 import 'TempStatusPage.dart';
+import 'ScheduleEdit.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -58,9 +59,14 @@ class HomePage extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () {
-                        const snackBar =
-                            SnackBar(content: Text('Show Details'));
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) {
+                            return Scaffold(
+                              body: ScheduleEditPage(scheduleIndex: index + 1),
+                            );
+                          }),
+                        );
                       },
                       child: Card(
                         margin: const EdgeInsets.symmetric(vertical: 5),

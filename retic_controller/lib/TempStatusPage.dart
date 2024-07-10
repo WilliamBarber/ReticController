@@ -4,14 +4,8 @@ import 'AppState.dart';
 import 'TimeDropDown.dart';
 import 'StationDropDown.dart';
 
-class TempStatusPage extends StatefulWidget {
+class TempStatusPage extends StatelessWidget {
   const TempStatusPage({super.key});
-
-  @override
-  State<TempStatusPage> createState() => _TempStatusPageState();
-}
-
-class _TempStatusPageState extends State<TempStatusPage> {
 
   @override
   Widget build(BuildContext context) {
