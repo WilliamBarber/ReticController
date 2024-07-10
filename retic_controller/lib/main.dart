@@ -30,6 +30,14 @@ class MyApp extends StatelessWidget {
             theme: ThemeData(
               colorScheme: lightColorScheme ?? _defaultLightColorScheme,
               useMaterial3: true,
+              /* uncomment for predictive back gesture
+              pageTransitionsTheme: const PageTransitionsTheme(
+                builders: {
+                  // Use PredictiveBackPageTransitionsBuilder to get the predictive back route transition!
+                  TargetPlatform.android: PredictiveBackPageTransitionsBuilder(),
+                },
+              ),
+                */
             ),
             darkTheme: ThemeData(
               colorScheme: darkColorScheme ?? _defaultDarkColorScheme,
