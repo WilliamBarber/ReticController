@@ -88,7 +88,7 @@ class _ScheduleEditPageState extends State<ScheduleEditPage> {
                   style: DefaultTextStyle.of(context)
                       .style
                       .apply(fontSizeFactor: 1.3),
-                  'Duration '),
+                  'Duration'),
               trailing: TimeDropDown(initialValue: appState.getScheduleDuration(scheduleIndex)),
             ),
             const Divider(

@@ -88,7 +88,7 @@ class AppState extends ChangeNotifier {
 
   Column _createScheduleColumn(int scheduleNumber) {
     String dayString = server.getSchedule(scheduleNumber).getDayString();
-    String timeString = server.getSchedule(scheduleNumber).getTimeString();
+    String timeString = 'Start: ${server.getSchedule(scheduleNumber).getTimeString()} | Duration: ${server.getSchedule(scheduleNumber).getDuration()} minutes';
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
