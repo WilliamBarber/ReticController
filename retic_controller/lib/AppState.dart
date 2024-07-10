@@ -17,17 +17,23 @@ class AppState extends ChangeNotifier {
   var dateFormat = DateFormat.dayMonthYear;
 
   ServerSimulator server = ServerSimulator();
-  int duration = 1; //TODO: pull from server
+  int tempDuration = 1; //TODO: pull from server
   int activeSchedule = 1;
   int activeStation = 0;
   bool reticActive = false;
   int queuedStation = 0;
   int queuedDuration = 1;
+  // TimeOfDay queuedStartTime = const TimeOfDay(hour: 0, minute: 0);
 
   void setPage(int page) {
     selectedIndex = page;
     notifyListeners();
   }
+
+  // void setQueuedStartTime(TimeOfDay time) {
+  //   queuedStartTime = time;
+  //   notifyListeners();
+  // }
 
   bool isDayActiveInSchedule(int scheduleIndex, int dayIndex) {
     return server.getSchedule(scheduleIndex).getDays().contains(Day.values[dayIndex]);
@@ -50,6 +56,19 @@ class AppState extends ChangeNotifier {
     String dayString = Day.values[index].toString();
     dayString = dayString.substring(dayString.indexOf('.') + 1);
     return dayString.replaceFirst(dayString[0], dayString[0].toUpperCase());
+  }
+
+  void setScheduleTime(int schedule, int hour, int minute) {
+    Schedule oldSchedule = server.getSchedule(schedule);
+    server.replaceSchedule(schedule, Schedule(oldSchedule.getDays(), hour, minute, oldSchedule.getDuration()));
+  }
+
+  int getScheduleHour(int schedule) {
+    return server.getSchedule(schedule).getHour();
+  }
+
+  int getScheduleMinute(int schedule) {
+    return server.getSchedule(schedule).getMinute();
   }
 
   void activateSchedule(int schedule) {
@@ -107,8 +126,8 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateDurationFromQueue() {
-    duration = queuedDuration; //TODO: push to server
+  void updateTempDurationFromQueue() {
+    tempDuration = queuedDuration; //TODO: push to server
     notifyListeners();
   }
 

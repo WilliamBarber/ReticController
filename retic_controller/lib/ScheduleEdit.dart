@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'AppState.dart';
-import 'DateTimeConverter.dart';
 import 'package:retic_controller/TimeDropDown.dart';
+import 'DateTimeConverter.dart';
 
 class ScheduleEditPage extends StatefulWidget {
   const ScheduleEditPage({super.key, required this.scheduleIndex});
@@ -14,14 +14,10 @@ class ScheduleEditPage extends StatefulWidget {
 }
 
 class _ScheduleEditPageState extends State<ScheduleEditPage> {
-  final DateTime day = DateTime.now();
-
-  TimeOfDay time =
-      TimeOfDay.fromDateTime(DateTime.now().add(const Duration(minutes: 1)));
-  late DateTime selectedDateTime = DateTimeConverter.getNextHalfHour(DateTime.parse(
-      '${day.year}-${DateTimeConverter.getMonthString(day)}-${DateTimeConverter.getDayString(day)} ${DateTimeConverter.getHourStringTimeOfDay(time)}:${DateTimeConverter.getMinuteStringTimeOfDay(time)}'));
-
   List<bool> queuedDayStatuses = [];
+  late int hour;
+  late int minute;
+  late TimeOfDay queuedStartTime = TimeOfDay(hour: hour, minute: minute);
 
 
   @override
@@ -29,6 +25,8 @@ class _ScheduleEditPageState extends State<ScheduleEditPage> {
     var appState = context.watch<AppState>();
 
     int scheduleIndex = widget.scheduleIndex;
+    hour = appState.getScheduleHour(scheduleIndex);
+    minute = appState.getScheduleMinute(scheduleIndex);
     for (int i = 0; i < 7; i++) {
       queuedDayStatuses.add(appState.isDayActiveInSchedule(scheduleIndex, i));
     }
@@ -46,6 +44,7 @@ class _ScheduleEditPageState extends State<ScheduleEditPage> {
                     appState.setDayStatusInSchedule(scheduleIndex, i, queuedDayStatuses[i]);
                   }
                   appState.setScheduleDurationFromQueue(scheduleIndex);
+                  appState.setScheduleTime(scheduleIndex, queuedStartTime.hour, queuedStartTime.minute);
                   Navigator.pop(context);
                 },
                 child: const Text('Save')),
@@ -68,12 +67,11 @@ class _ScheduleEditPageState extends State<ScheduleEditPage> {
                 TimeOfDay? picked = await showTimePicker(
                   helpText: '',
                   context: context,
-                  initialTime: TimeOfDay.fromDateTime(selectedDateTime),
+                  initialTime: queuedStartTime,
                 );
                 if (picked != null) {
                   setState(() {
-                    selectedDateTime = DateTime.parse(
-                        '${selectedDateTime.year}-${DateTimeConverter.getMonthString(selectedDateTime)}-${DateTimeConverter.getDayString(selectedDateTime)} ${DateTimeConverter.getHourStringTimeOfDay(picked)}:${DateTimeConverter.getMinuteStringTimeOfDay(picked)}');
+                    queuedStartTime = picked;
                   });
                 }
               },
@@ -81,7 +79,7 @@ class _ScheduleEditPageState extends State<ScheduleEditPage> {
                   style: DefaultTextStyle.of(context)
                       .style
                       .apply(fontSizeFactor: 1.3),
-                  ' ${DateTimeConverter.getHourStringDateTime(selectedDateTime)}:${DateTimeConverter.getMinuteStringDateTime(selectedDateTime)}'),
+                  ' ${queuedStartTime.hour.toString()}:${DateTimeConverter.getMinuteStringTimeOfDay(queuedStartTime)}'),
             ),
             ListTile(
               contentPadding: const EdgeInsets.only(left: 5.0, right: 5.0),

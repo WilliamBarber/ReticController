@@ -7,20 +7,16 @@ class _TimeDropDownState extends State<TimeDropDown> {
 
   List<String> timesList = <String>[
     '1',
-    '2',
-    '5',
+    '3',
+    '7',
     '10',
     '15',
-    '30',
   ];
 
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<AppState>();
-
     int initialValue = widget.initialValue;
-
-
 
     return DropdownMenu<String>(
       textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.normal),

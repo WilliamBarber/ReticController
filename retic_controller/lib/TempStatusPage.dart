@@ -21,7 +21,7 @@ class TempStatusPage extends StatelessWidget {
             child: FilledButton(
                 onPressed: () async {
                     appState.activateStationFromQueue();
-                    appState.updateDurationFromQueue();
+                    appState.updateTempDurationFromQueue();
                     Navigator.pop(context);
                 },
                 child: const Text('Start')),

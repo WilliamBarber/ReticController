@@ -45,7 +45,7 @@ class HomePage extends StatelessWidget {
                       appState.queuedStation = 0;
                       appState.queuedDuration = 1;
                       appState.activateStationFromQueue();
-                      appState.updateDurationFromQueue();
+                      appState.updateTempDurationFromQueue();
                     }
                   },
                   child: (!appState.reticActive)
