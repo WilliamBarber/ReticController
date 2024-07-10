@@ -34,13 +34,13 @@ class TempStatusPage extends StatelessWidget {
           children: [
             ListTile(
               contentPadding: const EdgeInsets.only(left: 5.0, right: 5.0),
-              leading: const Icon(Icons.access_time_rounded),
+              leading: const Icon(Icons.timelapse_rounded),
               title: Text(
                   style: DefaultTextStyle.of(context)
                       .style
                       .apply(fontSizeFactor: 1.3),
                   'Duration'),
-              trailing: const TimeDropDown(),
+              trailing: const TimeDropDown(initialValue: 1,),
             ),
             const Divider(
               height: 30

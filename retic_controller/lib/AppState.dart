@@ -42,7 +42,7 @@ class AppState extends ChangeNotifier {
     else {
       newDays.remove(Day.values[dayIndex]);
     }
-    server.replaceSchedule(scheduleIndex, Schedule(newDays, oldSchedule.getHour(), oldSchedule.getMinute()));
+    server.replaceSchedule(scheduleIndex, Schedule(newDays, oldSchedule.getHour(), oldSchedule.getMinute(), oldSchedule.getDuration()));
     notifyListeners();
   }
 
@@ -56,6 +56,15 @@ class AppState extends ChangeNotifier {
     server.activateSchedule(schedule);
     activeSchedule = server.getActiveScheduleIndex();
     notifyListeners();
+  }
+
+  int getScheduleDuration(int schedule) {
+    return server.getSchedule(schedule).getDuration();
+  }
+
+  void setScheduleDurationFromQueue(int schedule) {
+    Schedule oldSchedule = server.getSchedule(schedule);
+    server.replaceSchedule(schedule, Schedule(oldSchedule.getDays(), oldSchedule.getHour(), oldSchedule.getMinute(), queuedDuration));
   }
 
   Column _createScheduleColumn(int scheduleNumber) {

@@ -18,11 +18,14 @@ class _TimeDropDownState extends State<TimeDropDown> {
   Widget build(BuildContext context) {
     var appState = context.watch<AppState>();
 
+    int initialValue = widget.initialValue;
+
+
 
     return DropdownMenu<String>(
       textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
       label: const Text('Minute(s)'),
-      initialSelection: timesList[0],
+      initialSelection: initialValue.toString(),
       onSelected: (String? value) {
         setState(() {
           dropDownValue = value!;
@@ -42,7 +45,9 @@ class _TimeDropDownState extends State<TimeDropDown> {
 
 
 class TimeDropDown extends StatefulWidget {
-  const TimeDropDown({super.key});
+  const TimeDropDown({super.key, required this.initialValue});
+
+  final int initialValue;
 
   @override
   State<TimeDropDown> createState() => _TimeDropDownState();

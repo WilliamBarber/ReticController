@@ -4,9 +4,9 @@ class ServerSimulator {
   int _activeStation = 0;
   List<Schedule> _schedules = [
     Schedule.empty(),
-    Schedule([Day.monday, Day.tuesday, Day.wednesday, Day.thursday, Day.friday], 5, 0),
-    Schedule([Day.monday, Day.wednesday, Day.friday], 6, 30),
-    Schedule([Day.tuesday, Day.thursday, Day.saturday], 5, 30),
+    Schedule([Day.monday, Day.tuesday, Day.wednesday, Day.thursday, Day.friday], 5, 0, 10),
+    Schedule([Day.monday, Day.wednesday, Day.friday], 6, 30, 15),
+    Schedule([Day.tuesday, Day.thursday, Day.saturday], 5, 30, 15),
   ];
 
   /*
@@ -59,10 +59,11 @@ class ServerSimulator {
 class Schedule {
   int _timeHour = 0;
   int _timeMinute = 0;
+  int _cycleDuration = 0;
   bool _active = false;
   List<Day> _days = [];
 
-  Schedule(this._days, this._timeHour, this._timeMinute);
+  Schedule(this._days, this._timeHour, this._timeMinute, this._cycleDuration);
   Schedule.empty();
 
   void makeActive() {
@@ -91,6 +92,10 @@ class Schedule {
 
   int getMinute() {
     return _timeMinute;
+  }
+
+  int getDuration() {
+    return _cycleDuration;
   }
 
   String getTimeString() {

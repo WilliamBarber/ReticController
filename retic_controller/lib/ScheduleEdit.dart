@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'AppState.dart';
 import 'DateTimeConverter.dart';
+import 'package:retic_controller/TimeDropDown.dart';
 
 class ScheduleEditPage extends StatefulWidget {
   const ScheduleEditPage({super.key, required this.scheduleIndex});
@@ -44,6 +45,7 @@ class _ScheduleEditPageState extends State<ScheduleEditPage> {
                   for (int i = 0; i < 7; i++) {
                     appState.setDayStatusInSchedule(scheduleIndex, i, queuedDayStatuses[i]);
                   }
+                  appState.setScheduleDurationFromQueue(scheduleIndex);
                   Navigator.pop(context);
                 },
                 child: const Text('Save')),
@@ -80,6 +82,16 @@ class _ScheduleEditPageState extends State<ScheduleEditPage> {
                       .style
                       .apply(fontSizeFactor: 1.3),
                   ' ${DateTimeConverter.getHourStringDateTime(selectedDateTime)}:${DateTimeConverter.getMinuteStringDateTime(selectedDateTime)}'),
+            ),
+            ListTile(
+              contentPadding: const EdgeInsets.only(left: 5.0, right: 5.0),
+              leading: const Icon(Icons.timelapse_rounded),
+              title: Text(
+                  style: DefaultTextStyle.of(context)
+                      .style
+                      .apply(fontSizeFactor: 1.3),
+                  'Duration '),
+              trailing: TimeDropDown(initialValue: appState.getScheduleDuration(scheduleIndex)),
             ),
             const Divider(
                 height: 30
