@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'AppState.dart';
 import 'Homepage.dart';
-import 'Settings.dart';
+import 'StationStatusPage.dart';
 
 class HomePageFramework extends StatelessWidget {
   const HomePageFramework({super.key});
@@ -13,7 +13,7 @@ class HomePageFramework extends StatelessWidget {
     final theme = Theme.of(context);
 
     var selectedIndex = appState.selectedIndex;
-    var pages = const [HomePage(), SettingsPage()];
+    var pages = const [HomePage(), StationStatusPage()];
     Widget page = pages[selectedIndex];
 
     return LayoutBuilder(builder: (context, constraints) {
@@ -35,8 +35,8 @@ class HomePageFramework extends StatelessWidget {
                 label: 'Home',
               ),
               NavigationDestination(
-                icon: Icon(Icons.settings_rounded),
-                label: 'Settings',
+                icon: Icon(Icons.apps_rounded),
+                label: 'Status',
               ),
             ],
             selectedIndex: selectedIndex,

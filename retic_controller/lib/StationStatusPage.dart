@@ -11,7 +11,7 @@ class StationStatusPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Station Statuses'),
+        title: const Text('Station Status'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
