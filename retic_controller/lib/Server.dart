@@ -1,13 +1,43 @@
 enum Day {monday, tuesday, wednesday, thursday, friday, saturday, sunday}
 
-class ServerSimulator {
+List<Schedule> fakeServerSchedules = [
+  Schedule.empty(),
+  Schedule([Day.monday, Day.tuesday, Day.wednesday, Day.thursday, Day.friday], 5, 0, 10, true),
+  Schedule([Day.monday, Day.wednesday, Day.friday], 6, 30, 15, false),
+  Schedule([Day.tuesday, Day.thursday, Day.saturday], 5, 30, 15, false),
+];
+
+int fakeServerActiveStation = 0;
+
+class Server {
   int _activeStation = 0;
   List<Schedule> _schedules = [
     Schedule.empty(),
-    Schedule([Day.monday, Day.tuesday, Day.wednesday, Day.thursday, Day.friday], 5, 0, 10),
-    Schedule([Day.monday, Day.wednesday, Day.friday], 6, 30, 15),
-    Schedule([Day.tuesday, Day.thursday, Day.saturday], 5, 30, 15),
+    Schedule.empty(),
+    Schedule.empty(),
+    Schedule.empty(),
   ];
+
+  Future<List<Schedule>> _fetchSchedules() async { //TODO: pull from server
+    return Future.delayed(const Duration(seconds: 1), () => fakeServerSchedules);
+  }
+
+  Future<int> _fetchActiveStation() async { //TODO: pull from server
+    return Future.delayed(const Duration(seconds: 1), () => fakeServerActiveStation);
+  }
+
+  Future<void> _pushSchedules(List<Schedule> schedules) async { //TODO: push to server
+    fakeServerSchedules = schedules;
+  }
+
+  Future<void> _pushActiveStation(int station) async { //TODO: push to server
+    fakeServerActiveStation = station;
+  }
+
+  Future<void> updateDataFromServer() async {
+    _schedules = await _fetchSchedules();
+    _activeStation = await _fetchActiveStation();
+  }
 
   /*
   0: no active station
@@ -21,7 +51,7 @@ class ServerSimulator {
   }
 
   void activateStation(int station) {
-    _activeStation = station;
+    _pushActiveStation(station);
   }
 
   /*
@@ -40,10 +70,12 @@ class ServerSimulator {
   }
 
   void activateSchedule(int schedule) {
-    for (int i = 0; i < _schedules.length; i++) {
-      _schedules[i].makeInactive();
+    List<Schedule> schedules = _schedules;
+    for (int i = 0; i < schedules.length; i++) {
+      schedules[i] = schedules[i].makeInactive();
     }
-    _schedules[schedule].makeActive();
+    schedules[schedule] = schedules[schedule].makeActive();
+    _pushSchedules(schedules);
   }
 
   Schedule getSchedule(int index) {
@@ -51,7 +83,9 @@ class ServerSimulator {
   }
 
   void replaceSchedule(int scheduleIndex, Schedule newSchedule) {
-    _schedules[scheduleIndex] = newSchedule;
+    List<Schedule> schedules = _schedules;
+    schedules[scheduleIndex] = newSchedule;
+    _pushSchedules(schedules);
   }
 
 }
@@ -63,15 +97,15 @@ class Schedule {
   bool _active = false;
   List<Day> _days = [];
 
-  Schedule(this._days, this._timeHour, this._timeMinute, this._cycleDuration);
+  Schedule(this._days, this._timeHour, this._timeMinute, this._cycleDuration, this._active);
   Schedule.empty();
 
-  void makeActive() {
-    _active = true;
+  Schedule makeActive() {
+    return Schedule(_days, _timeHour, _timeMinute, _cycleDuration, true);
   }
 
-  void makeInactive() {
-    _active = false;
+  Schedule makeInactive() {
+    return Schedule(_days, _timeHour, _timeMinute, _cycleDuration, false);
   }
 
   bool isEmpty() {

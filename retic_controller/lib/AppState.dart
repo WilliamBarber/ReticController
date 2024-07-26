@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'ServerSimulator.dart';
+import 'Server.dart';
 
 enum DateFormat {
   dayMonthYear('Day/Month/Year'),
@@ -16,24 +16,23 @@ class AppState extends ChangeNotifier {
   int selectedIndex = 0;
   var dateFormat = DateFormat.dayMonthYear;
 
-  ServerSimulator server = ServerSimulator();
+  Server server = Server();
   int tempDuration = 1; //TODO: pull from server
   int activeSchedule = 1;
   int activeStation = 0;
   bool reticActive = false;
   int queuedStation = 0;
   int queuedDuration = 1;
-  // TimeOfDay queuedStartTime = const TimeOfDay(hour: 0, minute: 0);
+
+  Future<void> updateDataFromServer() async {
+    await server.updateDataFromServer();
+    notifyListeners();
+  }
 
   void setPage(int page) {
     selectedIndex = page;
     notifyListeners();
   }
-
-  // void setQueuedStartTime(TimeOfDay time) {
-  //   queuedStartTime = time;
-  //   notifyListeners();
-  // }
 
   bool isDayActiveInSchedule(int scheduleIndex, int dayIndex) {
     return server.getSchedule(scheduleIndex).getDays().contains(Day.values[dayIndex]);
@@ -48,7 +47,7 @@ class AppState extends ChangeNotifier {
     else {
       newDays.remove(Day.values[dayIndex]);
     }
-    server.replaceSchedule(scheduleIndex, Schedule(newDays, oldSchedule.getHour(), oldSchedule.getMinute(), oldSchedule.getDuration()));
+    server.replaceSchedule(scheduleIndex, Schedule(newDays, oldSchedule.getHour(), oldSchedule.getMinute(), oldSchedule.getDuration(), oldSchedule.isActive()));
     notifyListeners();
   }
 
@@ -60,7 +59,7 @@ class AppState extends ChangeNotifier {
 
   void setScheduleTime(int schedule, int hour, int minute) {
     Schedule oldSchedule = server.getSchedule(schedule);
-    server.replaceSchedule(schedule, Schedule(oldSchedule.getDays(), hour, minute, oldSchedule.getDuration()));
+    server.replaceSchedule(schedule, Schedule(oldSchedule.getDays(), hour, minute, oldSchedule.getDuration(), oldSchedule.isActive()));
   }
 
   int getScheduleHour(int schedule) {
@@ -83,7 +82,7 @@ class AppState extends ChangeNotifier {
 
   void setScheduleDurationFromQueue(int schedule) {
     Schedule oldSchedule = server.getSchedule(schedule);
-    server.replaceSchedule(schedule, Schedule(oldSchedule.getDays(), oldSchedule.getHour(), oldSchedule.getMinute(), queuedDuration));
+    server.replaceSchedule(schedule, Schedule(oldSchedule.getDays(), oldSchedule.getHour(), oldSchedule.getMinute(), queuedDuration, oldSchedule.isActive()));
   }
 
   Column _createScheduleColumn(int scheduleNumber) {
