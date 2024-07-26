@@ -19,11 +19,11 @@ class Server {
   ];
 
   Future<List<Schedule>> _fetchSchedules() async { //TODO: pull from server
-    return Future.delayed(const Duration(seconds: 1), () => fakeServerSchedules);
+    return Future.delayed(const Duration(milliseconds: 500), () => fakeServerSchedules);
   }
 
   Future<int> _fetchActiveStation() async { //TODO: pull from server
-    return Future.delayed(const Duration(seconds: 1), () => fakeServerActiveStation);
+    return Future.delayed(const Duration(milliseconds: 500), () => fakeServerActiveStation);
   }
 
   Future<void> _pushSchedules(List<Schedule> schedules) async { //TODO: push to server
