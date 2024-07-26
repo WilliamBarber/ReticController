@@ -108,9 +108,17 @@ class AppState extends ChangeNotifier {
     return station == activeStation;
   }
 
+  /* alternate option:
+    void activateStationFromQueue() async {
+      server.activateStation(queuedStation);
+      await updateDataFromServer();
+      activeStation = server.getActiveStation();
+      ...
+    }
+   */
   void activateStationFromQueue() {
     server.activateStation(queuedStation);
-    activeStation = server.getActiveStation();
+    activeStation = queuedStation;
     if (activeStation == 7) {
       runAll();
       return;
