@@ -1,13 +1,68 @@
-enum Day {monday, tuesday, wednesday, thursday, friday, saturday, sunday}
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
-List<Schedule> fakeServerSchedules = [
-  Schedule.empty(),
-  Schedule([Day.monday, Day.tuesday, Day.wednesday, Day.thursday, Day.friday], 5, 0, 10, true),
-  Schedule([Day.monday, Day.wednesday, Day.friday], 6, 30, 15, false),
-  Schedule([Day.tuesday, Day.thursday, Day.saturday], 5, 30, 15, false),
-];
+enum Day {monday, tuesday, wednesday, thursday, friday, saturday, sunday, none}
 
 int fakeServerActiveStation = 0;
+
+Day convertToDayEnum(String day) {
+  switch (day) {
+    case 'MON':
+      return Day.monday;
+    case 'TUE':
+      return Day.tuesday;
+    case 'WED':
+      return Day.wednesday;
+    case 'THU':
+      return Day.thursday;
+    case 'FRI':
+      return Day.friday;
+    case 'SAT':
+      return Day.saturday;
+    case 'SUN':
+      return Day.sunday;
+    default:
+      return Day.none;
+  }
+}
+
+List<Day> convertToDayEnumList(List<String> days) {
+  List<Day> enumDayList = [];
+  for (String day in days) {
+    enumDayList.add(convertToDayEnum(day));
+  }
+  return enumDayList;
+}
+
+String convertToDayString(Day day) {
+  switch (day) {
+    case Day.monday:
+      return 'MON';
+    case Day.tuesday:
+      return 'TUE';
+    case Day.wednesday:
+      return 'WED';
+    case Day.thursday:
+      return 'THU';
+    case Day.friday:
+      return 'FRI';
+    case Day.saturday:
+      return 'SAT';
+    case Day.sunday:
+      return 'SUN';
+    default:
+      return '';
+  }
+}
+
+List<String> convertToDayStringList(List<Day> days) {
+  List<String> stringDayList = [];
+  for (Day day in days) {
+    stringDayList.add(convertToDayString(day));
+  }
+  return stringDayList;
+}
+
 
 class Server {
   int _activeStation = 0;
@@ -18,16 +73,39 @@ class Server {
     Schedule.empty(),
   ];
 
-  Future<List<Schedule>> _fetchSchedules() async { //TODO: pull from server
-    return Future.delayed(const Duration(milliseconds: 500), () => fakeServerSchedules);
+  Future<List<Schedule>> _fetchSchedules() async {
+    var response = jsonDecode((await http.get(Uri.parse('http://192.168.0.241/cgi-bin/listSchedules.py'))).body) as Map<String, dynamic>;
+    List<Schedule> schedules = [Schedule.empty()];
+    for (var job in response['jobs']) {
+      List<Day> days = convertToDayEnumList(List<String>.from(job['job_spec']['days_of_week']));
+      schedules.add(Schedule(days, job['job_spec']['start_hour'], job['job_spec']['start_minute'], job['job_spec']['duration'], job['job_spec']['enabled']));
+    }
+    return schedules;
   }
 
   Future<int> _fetchActiveStation() async { //TODO: pull from server
     return Future.delayed(const Duration(milliseconds: 500), () => fakeServerActiveStation);
   }
 
-  Future<void> _pushSchedules(List<Schedule> schedules) async { //TODO: push to server
-    fakeServerSchedules = schedules;
+  Future<void> _pushSchedules(List<Schedule> schedules) async {
+    for (int i = 1; i < schedules.length; i++) {
+      Schedule schedule = schedules[i];
+      List<String> days = convertToDayStringList(schedule.getDays());
+      int startHour = schedule.getHour();
+      int startMinute = schedule.getMinute();
+      int duration = schedule.getDuration();
+      bool enabled = schedule.isActive();
+      http.post(
+        Uri.parse('http://192.168.0.241/cgi-bin/updateSchedule.py/$i'),
+        body: jsonEncode(<String, dynamic> {
+          'days_of_week' : days,
+          'start_hour' : startHour,
+          'start_minute' : startMinute,
+          'duration' : duration,
+          'enabled' : enabled,
+        }),
+      );
+    }
   }
 
   Future<void> _pushActiveStation(int station) async { //TODO: push to server

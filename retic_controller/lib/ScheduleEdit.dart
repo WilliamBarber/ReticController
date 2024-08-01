@@ -39,12 +39,7 @@ class _ScheduleEditPageState extends State<ScheduleEditPage> {
             padding: const EdgeInsets.only(right: 10.0),
             child: FilledButton(
                 onPressed: () async {
-                  //TODO: push to AppState/server
-                  for (int i = 0; i < 7; i++) {
-                    appState.setDayStatusInSchedule(scheduleIndex, i, queuedDayStatuses[i]);
-                  }
-                  appState.setScheduleDurationFromQueue(scheduleIndex);
-                  appState.setScheduleTime(scheduleIndex, queuedStartTime.hour, queuedStartTime.minute);
+                  appState.updateScheduleFromQueue(scheduleIndex, queuedDayStatuses, queuedStartTime.hour, queuedStartTime.minute);
                   Navigator.pop(context);
                 },
                 child: const Text('Save')),

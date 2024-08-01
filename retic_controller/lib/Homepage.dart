@@ -77,7 +77,7 @@ class HomePage extends StatelessWidget {
                             contentPadding: const EdgeInsets.all(1),
                             leading: Radio(
                               toggleable: true,
-                              groupValue: appState.activeSchedule - 1,
+                              groupValue: appState.getActiveScheduleIndex() - 1,
                               value: index,
                               onChanged: (value) {
                                 if (value == null) {

@@ -13,10 +13,16 @@ class HomePageFramework extends StatefulWidget {
 
 class _HomePageFrameworkState extends State<HomePageFramework> {
   @override
+  void initState() {
+    super.initState();
+    var appState = Provider.of<AppState>(context, listen: false);
+    appState.updateDataFromServer();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var appState = context.watch<AppState>();
-    appState.updateDataFromServer();
-    final theme = Theme.of(context);
+    // appState.updateDataFromServer();
 
     var selectedIndex = appState.selectedIndex;
     var pages = const [HomePage(), StationStatusPage()];

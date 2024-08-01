@@ -18,7 +18,6 @@ class AppState extends ChangeNotifier {
 
   Server server = Server();
   int tempDuration = 1; //TODO: pull from server
-  int activeSchedule = 1;
   int activeStation = 0;
   bool reticActive = false;
   int queuedStation = 0;
@@ -38,16 +37,15 @@ class AppState extends ChangeNotifier {
     return server.getSchedule(scheduleIndex).getDays().contains(Day.values[dayIndex]);
   }
 
-  void setDayStatusInSchedule(int scheduleIndex, int dayIndex, bool active) {
+  void updateScheduleFromQueue(int scheduleIndex, List<bool> queuedDayStatuses, int hour, int minute) {
     Schedule oldSchedule = server.getSchedule(scheduleIndex);
-    List<Day> newDays = oldSchedule.getDays();
-    if (active) {
-      newDays.add(Day.values[dayIndex]);
+    List<Day> newDays = [];
+    for (int i = 0; i < 7; i++) {
+      if (queuedDayStatuses[i]) {
+        newDays.add(Day.values[i]);
+      }
     }
-    else {
-      newDays.remove(Day.values[dayIndex]);
-    }
-    server.replaceSchedule(scheduleIndex, Schedule(newDays, oldSchedule.getHour(), oldSchedule.getMinute(), oldSchedule.getDuration(), oldSchedule.isActive()));
+    server.replaceSchedule(scheduleIndex, Schedule(newDays, hour, minute, queuedDuration, oldSchedule.isActive()));
     notifyListeners();
   }
 
@@ -55,11 +53,6 @@ class AppState extends ChangeNotifier {
     String dayString = Day.values[index].toString();
     dayString = dayString.substring(dayString.indexOf('.') + 1);
     return dayString.replaceFirst(dayString[0], dayString[0].toUpperCase());
-  }
-
-  void setScheduleTime(int schedule, int hour, int minute) {
-    Schedule oldSchedule = server.getSchedule(schedule);
-    server.replaceSchedule(schedule, Schedule(oldSchedule.getDays(), hour, minute, oldSchedule.getDuration(), oldSchedule.isActive()));
   }
 
   int getScheduleHour(int schedule) {
@@ -72,17 +65,15 @@ class AppState extends ChangeNotifier {
 
   void activateSchedule(int schedule) {
     server.activateSchedule(schedule);
-    activeSchedule = server.getActiveScheduleIndex();
     notifyListeners();
+  }
+
+  int getActiveScheduleIndex() {
+    return server.getActiveScheduleIndex();
   }
 
   int getScheduleDuration(int schedule) {
     return server.getSchedule(schedule).getDuration();
-  }
-
-  void setScheduleDurationFromQueue(int schedule) {
-    Schedule oldSchedule = server.getSchedule(schedule);
-    server.replaceSchedule(schedule, Schedule(oldSchedule.getDays(), oldSchedule.getHour(), oldSchedule.getMinute(), queuedDuration, oldSchedule.isActive()));
   }
 
   Column _createScheduleColumn(int scheduleNumber) {
