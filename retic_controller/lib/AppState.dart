@@ -1,23 +1,10 @@
 import 'package:flutter/material.dart';
 import 'Server.dart';
 
-enum DateFormat {
-  dayMonthYear('Day/Month/Year'),
-  monthDayYear('Month/Day/Year'),
-  yearMonthDay('Year/Month/Day');
-
-  const DateFormat(this.label);
-
-  final String label;
-}
-
-
 class AppState extends ChangeNotifier {
   int selectedIndex = 0;
-  var dateFormat = DateFormat.dayMonthYear;
 
   Server server = Server();
-  int tempDuration = 1; //TODO: pull from server
   int activeStation = 0;
   bool reticActive = false;
   int queuedStation = 0;
@@ -25,6 +12,7 @@ class AppState extends ChangeNotifier {
 
   Future<void> updateDataFromServer() async {
     await server.updateDataFromServer();
+    activeStation = server.getActiveStation();
     notifyListeners();
   }
 
@@ -99,38 +87,28 @@ class AppState extends ChangeNotifier {
     return station == activeStation;
   }
 
-  /* alternate option:
-    void activateStationFromQueue() async {
-      server.activateStation(queuedStation);
-      await updateDataFromServer();
-      activeStation = server.getActiveStation();
-      ...
-    }
-   */
-  void activateStationFromQueue() {
-    server.activateStation(queuedStation);
-    activeStation = queuedStation;
-    if (activeStation == 7) {
-      runAll();
-      return;
-    }
-    else if (activeStation == 0) {
-      reticActive = false;
+  bool isReticActive() {
+    return activeStation != 0;
+  }
+
+  void pushTemporaryScheduleFromQueue() async {
+    List<int> stations = [];
+    if (queuedStation == 7) {
+      for (int i = 1; i < 7; i++) {
+        stations.add(i);
+      }
     }
     else {
-      reticActive = true;
+      stations.add(queuedStation);
     }
-
-    notifyListeners();
+    DateTime dateTime = DateTime.now().add(const Duration(minutes: 1));
+    TimeOfDay time = TimeOfDay.fromDateTime(dateTime);
+    await server.pushTemporarySchedule(stations, time.hour, time.minute, queuedDuration);
+    updateDataFromServer();
   }
 
-  void updateTempDurationFromQueue() {
-    tempDuration = queuedDuration; //TODO: push to server
-    notifyListeners();
-  }
-
-  void runAll() {
-    queuedStation = 1; //TODO: this needs to run all stations in order. Will need to push to server.
-    activateStationFromQueue();
+  void cancelTemporarySchedule() async {
+    await server.cancelTemporarySchedule();
+    updateDataFromServer();
   }
 }

@@ -1,9 +1,8 @@
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 enum Day {monday, tuesday, wednesday, thursday, friday, saturday, sunday, none}
-
-int fakeServerActiveStation = 0;
 
 Day convertToDayEnum(String day) {
   switch (day) {
@@ -83,8 +82,9 @@ class Server {
     return schedules;
   }
 
-  Future<int> _fetchActiveStation() async { //TODO: pull from server
-    return Future.delayed(const Duration(milliseconds: 500), () => fakeServerActiveStation);
+  Future<int> _fetchActiveStation() async {
+    var response = jsonDecode((await http.get(Uri.parse('http://192.168.0.241/cgi-bin/getActiveStation.py'))).body) as Map<String, dynamic>;
+    return response['active_station'];
   }
 
   Future<void> _pushSchedules(List<Schedule> schedules) async {
@@ -95,7 +95,7 @@ class Server {
       int startMinute = schedule.getMinute();
       int duration = schedule.getDuration();
       bool enabled = schedule.isActive();
-      http.post(
+      http.put(
         Uri.parse('http://192.168.0.241/cgi-bin/updateSchedule.py/$i'),
         body: jsonEncode(<String, dynamic> {
           'days_of_week' : days,
@@ -108,8 +108,20 @@ class Server {
     }
   }
 
-  Future<void> _pushActiveStation(int station) async { //TODO: push to server
-    fakeServerActiveStation = station;
+  Future<void> pushTemporarySchedule(List<int> stations, int startHour, int startMinute, int duration) async {
+    http.put(
+        Uri.parse('http://192.168.0.241/cgi-bin/temporarySchedule.py'),
+      body: jsonEncode(<String, dynamic> {
+        'stations' : stations,
+        'start_hour' : startHour,
+        'start_minute' : startMinute,
+        'duration' : duration,
+      }),
+    );
+  }
+
+  Future<void> cancelTemporarySchedule() async {
+    http.put(Uri.parse('http://192.168.0.241/cgi-bin/disableRetic.py'));
   }
 
   Future<void> updateDataFromServer() async {
@@ -126,10 +138,6 @@ class Server {
    */
   int getActiveStation() {
     return _activeStation;
-  }
-
-  void activateStation(int station) {
-    _pushActiveStation(station);
   }
 
   /*

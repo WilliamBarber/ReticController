@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'AppState.dart';
+import 'RefreshButton.dart';
 
 class StationStatusPage extends StatelessWidget {
   const StationStatusPage({super.key});
@@ -12,6 +13,9 @@ class StationStatusPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Station Status'),
+        actions: [
+          RefreshButton(appState: appState),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),

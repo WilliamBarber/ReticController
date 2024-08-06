@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'AppState.dart';
 import 'TempStatusPage.dart';
 import 'ScheduleEdit.dart';
+import 'RefreshButton.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -14,6 +15,9 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home'),
+        actions: [
+          RefreshButton(appState: appState),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
@@ -23,14 +27,14 @@ class HomePage extends StatelessWidget {
                 child: Column(
               children: [
                 Text(
-                  (!appState.reticActive) ? 'All Stations are Off' : 'Station ${appState.activeStation} is On',
+                  (!appState.isReticActive()) ? 'All Stations are Off' : 'Station ${appState.activeStation} is On',
                   style: DefaultTextStyle.of(context)
                       .style
                       .apply(fontSizeFactor: 2.0),
                 ),
                 FilledButton.tonal(
                   onPressed: () {
-                    if (!appState.reticActive) {
+                    if (!appState.isReticActive()) {
                       appState.queuedStation = 7;
                       appState.queuedDuration = 1;
                       Navigator.push(
@@ -42,13 +46,10 @@ class HomePage extends StatelessWidget {
                         }),
                       );
                     } else {
-                      appState.queuedStation = 0;
-                      appState.queuedDuration = 1;
-                      appState.activateStationFromQueue();
-                      appState.updateTempDurationFromQueue();
+                      appState.cancelTemporarySchedule();
                     }
                   },
-                  child: (!appState.reticActive)
+                  child: (!appState.isReticActive())
                       ? const Text('Turn on Temporarily')
                       : const Text('Turn off'),
                 ),
@@ -103,3 +104,4 @@ class HomePage extends StatelessWidget {
     );
   }
 }
+

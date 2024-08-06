@@ -27,6 +27,7 @@ class _ScheduleEditPageState extends State<ScheduleEditPage> {
     int scheduleIndex = widget.scheduleIndex;
     hour = appState.getScheduleHour(scheduleIndex);
     minute = appState.getScheduleMinute(scheduleIndex);
+    appState.queuedDuration = appState.getScheduleDuration(scheduleIndex);
     for (int i = 0; i < 7; i++) {
       queuedDayStatuses.add(appState.isDayActiveInSchedule(scheduleIndex, i));
     }

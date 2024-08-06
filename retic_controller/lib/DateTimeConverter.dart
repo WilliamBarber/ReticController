@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+// import 'package:provider/provider.dart';
 
-import 'AppState.dart';
+// import 'AppState.dart';
 
 class DateTimeConverter {
   static String weekdayToString(int dateInt) {
@@ -85,17 +85,17 @@ class DateTimeConverter {
     return '${dateTime.month}/${dateTime.day}/${dateTime.year}';
   }
 
-  static String formattedDate(DateTime dateTime, BuildContext context) {
-    var appState = context.watch<AppState>();
-
-    if (appState.dateFormat == DateFormat.dayMonthYear) {
-      return '${dateTime.day}/${dateTime.month}/${dateTime.year}';
-    } else if (appState.dateFormat == DateFormat.monthDayYear) {
-      return '${dateTime.month}/${dateTime.day}/${dateTime.year}';
-    } else {
-      return '${dateTime.year}/${dateTime.month}/${dateTime.day}';
-    }
-  }
+  // static String formattedDate(DateTime dateTime, BuildContext context) {
+  //   var appState = context.watch<AppState>();
+  //
+  //   if (appState.dateFormat == DateFormat.dayMonthYear) {
+  //     return '${dateTime.day}/${dateTime.month}/${dateTime.year}';
+  //   } else if (appState.dateFormat == DateFormat.monthDayYear) {
+  //     return '${dateTime.month}/${dateTime.day}/${dateTime.year}';
+  //   } else {
+  //     return '${dateTime.year}/${dateTime.month}/${dateTime.day}';
+  //   }
+  // }
 
   static compareDates(DateTime date1, DateTime date2) {
     return date1.year == date2.year &&

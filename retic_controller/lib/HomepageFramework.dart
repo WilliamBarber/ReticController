@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'AppState.dart';
 import 'Homepage.dart';
 import 'StationStatusPage.dart';
+import 'dart:async';
 
 class HomePageFramework extends StatefulWidget {
   const HomePageFramework({super.key});
@@ -16,14 +17,13 @@ class _HomePageFrameworkState extends State<HomePageFramework> {
   void initState() {
     super.initState();
     var appState = Provider.of<AppState>(context, listen: false);
+    Timer.periodic(const Duration(seconds: 1), (Timer timer) => appState.updateDataFromServer());
     appState.updateDataFromServer();
   }
 
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<AppState>();
-    // appState.updateDataFromServer();
-
     var selectedIndex = appState.selectedIndex;
     var pages = const [HomePage(), StationStatusPage()];
     Widget page = pages[selectedIndex];

@@ -20,9 +20,8 @@ class TempStatusPage extends StatelessWidget {
             padding: const EdgeInsets.only(right: 10.0),
             child: FilledButton(
                 onPressed: () async {
-                    appState.activateStationFromQueue();
-                    appState.updateTempDurationFromQueue();
-                    Navigator.pop(context);
+                  appState.pushTemporaryScheduleFromQueue();
+                  Navigator.pop(context);
                 },
                 child: const Text('Start')),
           ),
@@ -40,7 +39,7 @@ class TempStatusPage extends StatelessWidget {
                       .style
                       .apply(fontSizeFactor: 1.3),
                   'Duration'),
-              trailing: const TimeDropDown(initialValue: 1,),
+              trailing: const TimeDropDown(initialValue: 1),
             ),
             const Divider(
               height: 30
