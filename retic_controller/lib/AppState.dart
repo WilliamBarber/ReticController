@@ -26,14 +26,14 @@ class AppState extends ChangeNotifier {
   }
 
   void updateScheduleFromQueue(int scheduleIndex, List<bool> queuedDayStatuses, int hour, int minute) {
-    Schedule oldSchedule = server.getSchedule(scheduleIndex);
+    bool active = server.getSchedule(scheduleIndex).isActive();
     List<Day> newDays = [];
     for (int i = 0; i < 7; i++) {
       if (queuedDayStatuses[i]) {
         newDays.add(Day.values[i]);
       }
     }
-    server.replaceSchedule(scheduleIndex, Schedule(newDays, hour, minute, queuedDuration, oldSchedule.isActive()));
+    server.replaceSchedule(scheduleIndex, Schedule(newDays, hour, minute, queuedDuration, active));
     notifyListeners();
   }
 

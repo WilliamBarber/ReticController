@@ -17,7 +17,7 @@ class _HomePageFrameworkState extends State<HomePageFramework> {
   void initState() {
     super.initState();
     var appState = Provider.of<AppState>(context, listen: false);
-    Timer.periodic(const Duration(seconds: 1), (Timer timer) => appState.updateDataFromServer());
+    Timer.periodic(const Duration(seconds: 30), (Timer timer) => appState.updateDataFromServer());
     appState.updateDataFromServer();
   }
 

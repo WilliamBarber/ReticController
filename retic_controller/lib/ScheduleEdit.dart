@@ -14,20 +14,26 @@ class ScheduleEditPage extends StatefulWidget {
 }
 
 class _ScheduleEditPageState extends State<ScheduleEditPage> {
+  @override
+  void initState() {
+    super.initState();
+    scheduleIndex = widget.scheduleIndex;
+    var appState = Provider.of<AppState>(context, listen: false);
+    appState.queuedDuration = appState.getScheduleDuration(scheduleIndex);
+    hour = appState.getScheduleHour(scheduleIndex);
+    minute = appState.getScheduleMinute(scheduleIndex);
+  }
+
   List<bool> queuedDayStatuses = [];
   late int hour;
   late int minute;
+  late int scheduleIndex;
   late TimeOfDay queuedStartTime = TimeOfDay(hour: hour, minute: minute);
 
 
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<AppState>();
-
-    int scheduleIndex = widget.scheduleIndex;
-    hour = appState.getScheduleHour(scheduleIndex);
-    minute = appState.getScheduleMinute(scheduleIndex);
-    appState.queuedDuration = appState.getScheduleDuration(scheduleIndex);
     for (int i = 0; i < 7; i++) {
       queuedDayStatuses.add(appState.isDayActiveInSchedule(scheduleIndex, i));
     }

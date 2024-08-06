@@ -18,7 +18,7 @@ class RefreshButton extends StatelessWidget {
           onPressed: () async {
             appState.updateDataFromServer();
           },
-          child: const Text('Refresh')),
+          child: const Icon(Icons.refresh_rounded)),
     );
   }
 }
