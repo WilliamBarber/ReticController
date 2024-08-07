@@ -18,10 +18,11 @@ class _StationDropDownState extends State<StationDropDown> {
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<AppState>();
+    int initialStation = widget.initialStation;
 
     return DropdownMenu<String>(
       textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-      initialSelection: stationList[0],
+      initialSelection: stationList[initialStation],
       onSelected: (String? value) {
         setState(() {
             dropDownValue = value!;
@@ -42,7 +43,9 @@ class _StationDropDownState extends State<StationDropDown> {
 
 
 class StationDropDown extends StatefulWidget {
-  const StationDropDown({super.key});
+  const StationDropDown({super.key, required this.initialStation});
+
+  final int initialStation;
 
   @override
   State<StationDropDown> createState() => _StationDropDownState();

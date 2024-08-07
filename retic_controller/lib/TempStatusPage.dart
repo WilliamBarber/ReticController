@@ -5,7 +5,9 @@ import 'TimeDropDown.dart';
 import 'StationDropDown.dart';
 
 class TempStatusPage extends StatelessWidget {
-  const TempStatusPage({super.key});
+  const TempStatusPage({super.key, required this.initialStation});
+
+  final int initialStation;
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +54,7 @@ class TempStatusPage extends StatelessWidget {
                       .style
                       .apply(fontSizeFactor: 1.3),
                   'Station'),
-              trailing: const StationDropDown(),
+              trailing: StationDropDown(initialStation: initialStation),
             ),
           ],
         ),

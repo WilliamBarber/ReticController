@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'AppState.dart';
 import 'RefreshButton.dart';
+import 'IndividualStatusPage.dart';
 
 class StationStatusPage extends StatelessWidget {
   const StationStatusPage({super.key});
@@ -21,20 +22,30 @@ class StationStatusPage extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         child: Center(
           child: ListView.builder(
-            physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             itemCount: 6,
             itemBuilder: (context, index) {
-              return Card(
-                margin: const EdgeInsets.symmetric(vertical: 5),
-                child: Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: ListTile(
-                    contentPadding: const EdgeInsets.all(1),
-                    leading: Text('Station ${index + 1}'),
-                    title: Text(appState.isStationActive(index + 1)
-                        ? 'Active'
-                        : 'Inactive'),
+              return GestureDetector(
+                onTap: () {
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(builder: (context) {
+                  //     return Scaffold(
+                  //       body: IndividualStatusPage(stationNumber: index + 1),
+                  //     );
+                  //   }),
+                  // );
+                },
+                child: Card(
+                  margin: const EdgeInsets.symmetric(vertical: 5),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: ListTile(
+                      contentPadding: const EdgeInsets.all(1),
+                      title: Text('Station ${index + 1}: ${appState.isStationActive(index + 1)
+                          ? 'Active'
+                          : 'Inactive'}' ),
+                    ),
                   ),
                 ),
               );
